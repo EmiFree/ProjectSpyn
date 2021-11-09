@@ -3,7 +3,6 @@ state = 0;
 while state ~= 6
     
     wallDistance =  brick.UltrasonicDist(3);
-    frontWall = brick.TouchPressed(4);
     
     %where we would want the robot to be around
     distanceWall = 22;
