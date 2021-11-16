@@ -13,11 +13,9 @@ while state ~= 6
     %Distance to indicate when to turn right.
     distanceMax = 50;
     
-    speedA = -25;
-    speedB = -25;
     %Equations to slow down the speed as it gets closer to the center
-    driftLeftEquation = -speedA + (wallDistance / 20);
-    driftRightEquation = (20 / wallDistance) - speedB;
+    driftLeftEquation = -speedA + (wallDistance / 30);
+    driftRightEquation = (10 / wallDistance) - speedB;
     
     disp(wallDistance);
     
@@ -38,9 +36,12 @@ while state ~= 6
            brick.MoveMotor('A', speedA);
            pause(1);
 
-   elseif (wallDistance > distanceWall) % turning right
-         % fprintf("turning right");
-        
+   elseif (wallDistance > distanceMax) % turning right
+            fprintf("turning right");
+            brick.MoveMotor('A', speedA);
+            brick.MoveMotor('B', 30);
+            pause(1);
+            
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
           fprintf("Drifting Right");
       
