@@ -56,8 +56,10 @@ function touchCheck(brick)
     if(frontWall == 1)
         fprintf("bump!");
         brick.StopAllMotors('Brake');  %stops robot
-        brick.MoveMotor('AB', 50);
+        brick.MoveMotorAngleRel('B', 25, 20, 'Brake');
+        turn(brick, 90); 
     end
+    frontWall = 0;
 end
 
 function colorCheck(brick)
