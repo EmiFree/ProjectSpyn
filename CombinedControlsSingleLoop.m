@@ -21,29 +21,44 @@ brick.SetColorMode(1, 2);
     
 
     end
-turn(brick, 90);        %need to test this method, probably doesn't work well but its a start
+
     
 CloseKeyboard(); %Closes keyboard inputs
 
 
-function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left positive
-                                %CW/right negative
+function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negative
+                                %CW/right positive
     brick.StopMotor('A', 'Brake');
     brick.StopMotor('B', 'Brake');
     brick.GyroCalibrate(2);
+    pause(0.5);
     curAngle = brick.GyroAngle(2);
-    
-    if(angle > 0)               %positive, so turn CCW/left
-       while(curAngle < angle)
-           brick.MoveMotorAngleRel('A', -25, 20, 'Brake');
-           brick.MoveMotorAngleRel('B', 25, 20, 'Brake');
-           curAngle = brick.GyroAngle(2);         
+    curAngle = brick.GyroAngle(2);
+    curAngle = brick.GyroAngle(2);
+    disp(angle);
+    disp(curAngle);
+    if(angle > 0)               %positive, so turn CW/right
+        fprintf("CW");
+        disp(curAngle);
+       while (curAngle < (angle - 6))
+           brick.MoveMotorAngleRel('A', 25, 5, 'Brake');
+           brick.MoveMotorAngleRel('B', -25, 5, 'Brake');
+           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);           
+           disp(curAngle);
+           
        end                             
-    else                        %negative, so turn CW/right
-        while(curAngle > angle)
-           brick.MoveMotorAngleRel('A', 25, 20, 'Brake');
-           brick.MoveMotorAngleRel('B', -25, 20, 'Brake');
-           curAngle = brick.GyroAngle(2);         
+    else                        %negative, so turn CCW/left
+        fprintf("CCW");
+        while(curAngle > (angle + 6))
+           brick.MoveMotorAngleRel('A', -25, 5, 'Brake');
+           brick.MoveMotorAngleRel('B', 25, 5, 'Brake');
+           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);
+                      disp(curAngle);
+
         end      
     end    
 
@@ -55,8 +70,11 @@ function touchCheck(brick)
     
     if(frontWall == 1)
         fprintf("bump!");
-        brick.StopAllMotors('Brake');  %stops robot
-        brick.MoveMotorAngleRel('B', 25, 20, 'Brake');
+        brick.StopMotor('A');  %stops robot
+        brick.StopMotor('B');
+        brick.MoveMotorAngleRel('A', 25, 200, 'Brake');
+        brick.MoveMotorAngleRel('B', 25, 200, 'Brake');
+        pause(2);
         turn(brick, 90); 
     end
     frontWall = 0;
@@ -95,7 +113,7 @@ end
 
 function ultraCheck(brick)
     %add ultrasonic testing and adjustments to speedA and speedB here
-    music(brick);           %temp code so method is not empty
+               %temp code so method is not empty
 end
 
 function manualControl(brick)
@@ -113,11 +131,11 @@ function manualControl(brick)
                 disp('Going Back');
                 brick.MoveMotorAngleRel('A', 30, 200, 'Brake');
                 brick.MoveMotorAngleRel('B', 30, 200, 'Brake');
-            case 'a'
+            case 'd'
                 disp('Going Left');
                 brick.MoveMotorAngleRel('A', 10, 75, 'Brake');
                 brick.MoveMotorAngleRel('B', -5, 75, 'Brake');
-            case 'd'
+            case 'a'
                 disp('Going Right');
                  brick.MoveMotorAngleRel('A', -5, 75, 'Brake');
                 brick.MoveMotorAngleRel('B', 10, 75, 'Brake');
@@ -136,7 +154,7 @@ function manualControl(brick)
 end
 
 function music(brick)
-            volume = 100;
+            volume = 10;
             brick.playTone(volume, 349.23, 166.67);
             pause(0.16667);
             brick.playTone(volume, 466.16, 166.67);
@@ -149,6 +167,3 @@ function music(brick)
             pause(0.125);
             brick.playTone(volume, 698.46, 1000);
 end
-
-
-%test edit
