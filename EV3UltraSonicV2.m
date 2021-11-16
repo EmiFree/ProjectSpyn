@@ -8,32 +8,35 @@ while state ~= 6
     distanceWall = 22;
     
     %deviation from center desired
-    distanceRoom = 0.5;
+    distanceRoom = 1.5;
     
     %Distance to indicate when to turn right.
     distanceMax = 50;
     
     %Equations to slow down the speed as it gets closer to the center
-    driftLeftEquation = 30 + (wallDistance / 20);
-    driftRightEquation = (15 / wallDistance) + 30;
+    driftLeftEquation = 31 + (wallDistance / 20);
+    driftRightEquation = (20 / wallDistance) + 31;
     
     disp(wallDistance);
     
+    disp(wallDistance);
     if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and
        %room inside the room of error.
             fprintf("Moving Forward");
-            brick.MoveMotorAngleRel('A', -30, 200, 'Brake');
-            brick.MoveMotorAngleRel('B', -30, 200, 'Brake');
+            brick.MoveMotor('A', -30);
+            brick.MoveMotor('B', -30);
             pause(1);
+            
         
         
     elseif wallDistance > (distanceWall + distanceRoom) %Drifiting left
         fprintf("Drifting Left");
        % while wallDistance > (distanceWall - distanceRoom) 
-            brick.MoveMotorAngleRel('B', -(driftLeftEquation), 100, 'Brake');
-            brick.MoveMotorAngleRel('A', -30, 100, 'Brake');
+            brick.MoveMotor('B', -(driftLeftEquation));
+            brick.MoveMotor('A', -30);
             pause(1);
+            
        % end
         
 
@@ -43,9 +46,10 @@ while state ~= 6
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
           fprintf("Drifting Right");
         
-          brick.MoveMotorAngleRel('B', -30, 150, 'Brake');
-          brick.MoveMotorAngleRel('A', -(driftRightEquation), 150, 'Brake');
+          brick.MoveMotor('B', -30);
+          brick.MoveMotor('A', -(driftRightEquation));
           pause(1);
+          
 
         
    end
