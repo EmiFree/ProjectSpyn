@@ -24,6 +24,9 @@ brick.SetColorMode(1, 2);
     fprintf("SpeedB: ");
     disp(speedB);
     end
+    
+    brick.StopMotor('A', 'Brake');
+    brick.StopMotor('B', 'Brake');
 
     
 
