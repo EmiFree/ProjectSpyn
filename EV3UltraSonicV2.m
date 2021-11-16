@@ -3,7 +3,8 @@ state = 0;
 while state ~= 6
     
     wallDistance =  brick.UltrasonicDist(3);
-    
+    global speedA;
+    global speedB;
     %where we would want the robot to be around
     distanceWall = 22;
     
