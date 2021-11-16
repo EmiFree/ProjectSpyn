@@ -1,8 +1,8 @@
 %example of function turn(brick, 180);        %need to test this method, probably doesn't work well but its a start
     
 
-function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left positive
-                                %CW/right negative
+function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negative
+                                %CW/right positive
     %brick.StopMotor('A', 'Brake');
     %brick.StopMotor('B', 'Brake');
     brick.GyroCalibrate(2);
