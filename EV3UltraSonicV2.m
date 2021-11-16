@@ -19,7 +19,6 @@ while state ~= 6
     
     disp(wallDistance);
     
-    disp(wallDistance);
     if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and
        %room inside the room of error.
