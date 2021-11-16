@@ -15,7 +15,7 @@ while state ~= 6
     
     %Equations to slow down the speed as it gets closer to the center
     driftLeftEquation = 30 + (wallDistance / 20);
-    driftRightEquation = (19 / wallDistance) + 30;
+    driftRightEquation = (15 / wallDistance) + 30;
     
     disp(wallDistance);
     
