@@ -55,6 +55,8 @@ function touchCheck(brick)
     
     if(frontWall == 1)
         fprintf("bump!");
+        brick.StopAllMotors('Brake');  %stops robot
+        brick.MoveMotor('AB', 50);
     end
 end
 
