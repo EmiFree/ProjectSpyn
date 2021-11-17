@@ -124,17 +124,18 @@ function ultraCheck(brick)
     distanceWall = 22;
     
     %deviation from center desired
-    distanceRoom = 6;
+    distanceRoom = 1;
     
     %Distance to indicate when to turn right.
-    distanceMax = 50;
+    distanceMax = 40;
     
     %Equations to slow down the speed as it gets closer to the center
-    driftLeftEquation = -speedA + (wallDistance / 30);
-    driftRightEquation = (10 / wallDistance) - speedB;
+    driftLeftEquation = -speedA + (27 / wallDistance^3);
+    driftRightEquation = ( 2 / 2^wallDistance) - speedB;
     
     disp(wallDistance);
     
+    disp(wallDistance);
     if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and room inside the room of error.
             fprintf("Moving Forward");
@@ -152,11 +153,9 @@ function ultraCheck(brick)
            pause(1);
 
    elseif (wallDistance > distanceMax) % turning right
-            fprintf("turning right");
-            brick.MoveMotor('A', speedA);
-            brick.MoveMotor('B', 30);
-            pause(1);
-            
+         fprintf("turning right");
+         turn(brick, 90);
+        
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
           fprintf("Drifting Right");
       
