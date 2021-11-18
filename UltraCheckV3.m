@@ -28,7 +28,7 @@ function ultraCheck(brick)
     if wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
         fprintf("Drifting Left");
       
-           speedA = -(driftLeftEquation);
+           speedB = -(driftLeftEquation);
           
 
    elseif (wallDistance > distanceMax) % turning right
@@ -39,7 +39,7 @@ function ultraCheck(brick)
           fprintf("Drifting Right");
       
              
-             speedB = -(driftRightEquation);
+             speedA = -(driftRightEquation);
              
           
 
