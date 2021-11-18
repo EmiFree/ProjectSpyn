@@ -18,14 +18,14 @@ function ultraCheck(brick)
     disp(wallDistance);
     
     disp(wallDistance);
-    if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
+    %if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and room inside the room of error.
-            fprintf("Moving Forward");
+     %       fprintf("Moving Forward");
             
             
         
         
-    elseif wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
+    if wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
         fprintf("Drifting Left");
       
            speedA = -(driftLeftEquation);
