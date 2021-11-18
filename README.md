@@ -1,2 +1,2 @@
 # ProjectSpyn
-ASU FSE 100 project spyn group 2
+ASU FSE 100 Project Spyn Group 2
