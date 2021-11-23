@@ -98,7 +98,7 @@ function colorCheck(brick)
                  brick.StopMotor('A', 'Brake');
                  brick.StopMotor('B', 'Brake');               
                  fprintf("Stopped at red line");
-                 pause(3);
+                 pause(6);
                  brick.MoveMotorAngleRel('AB', -30, 180, 'Brake');
                  pause(1);
                  
