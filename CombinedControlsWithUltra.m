@@ -9,20 +9,24 @@ loop = 1;
 brick.SetColorMode(1, 2);
 
 
-    while(loop == 1)        %main loop, runs scanning functions, moves the robot       
-    colorCheck(brick);
-    pause(0.02);
-    touchCheck(brick);
-    pause(0.05);
-    ultraCheck(brick);
-    pause(0.01); 
-    brick.MoveMotor('A', speedA);       
-    brick.MoveMotor('B',speedB);
-    
-    fprintf("SpeedA: ");
-    disp(speedA);
-    fprintf("SpeedB: ");
-    disp(speedB);
+    while(loop == 1)        %main loop, runs scanning functions, moves the robot    
+        colorCheck(brick);
+        pause(0.025);
+        touchCheck(brick);
+        pause(0.05);
+        colorCheck(brick);
+        pause(0.025);
+        touchCheck(brick);
+        pause(0.05);
+        ultraCheck(brick);
+        pause(0.01); 
+        brick.MoveMotor('A', speedA);       
+        brick.MoveMotor('B',speedB);
+
+        fprintf("SpeedA: ");
+        disp(speedA);
+        fprintf("SpeedB: ");
+        disp(speedB);
     end
     
     %END OF MAIN LOOP, ALL CODE IN THIS ZONE IS EXIT CODE
@@ -57,7 +61,7 @@ function turn(brick, angle)                 %uses gyro to turn exact angle, CCW/
            curAngle = brick.GyroAngle(2);                       %read angle measure
            curAngle = brick.GyroAngle(2);
            curAngle = brick.GyroAngle(2);           
-           disp(curAngle);
+           fprintf(' %d\n' curAngle);
            
        end                             
     else                                    %negative, so turn CCW/left
@@ -68,7 +72,7 @@ function turn(brick, angle)                 %uses gyro to turn exact angle, CCW/
            curAngle = brick.GyroAngle(2);                       %read angle measure
            curAngle = brick.GyroAngle(2);   
            curAngle = brick.GyroAngle(2);
-           disp(curAngle);
+           fprintf(' %d\n' curAngle);
 
         end      
     end    
