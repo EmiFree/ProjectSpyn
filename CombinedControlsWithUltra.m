@@ -152,7 +152,8 @@ function ultraCheck(brick)
     
     %Equations to slow down the speed as it gets closer to the center
     driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
-    driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;
+    driftRightEquation = ((wallDistance - 22)^2 / 300) + 30;
+    %( (700* wallDistance) / wallDistance^3) +30;
     
     disp(wallDistance);
     
