@@ -1,7 +1,7 @@
 global speedA
 global speedB
-speedA = -40;
-speedB = -40;
+speedA = -30;
+speedB = -30;
 
 global loop
 loop = 1;
@@ -12,13 +12,13 @@ brick.SetColorMode(1, 2);
  
     brick.MoveMotor('A', speedA);       %need to check how speed increments in a loop work
     brick.MoveMotor('B',speedB);        %and make sure that you can change speed without using a stop motor command
-    
+    pause(0.1);
     colorCheck(brick);
-    pause(0.05);
+    pause(0.1);
     touchCheck(brick);
-    pause(0.05); 
+    pause(0.1); 
     ultraCheck(brick);
-    pause(0.05); 
+    pause(0.1); 
     fprintf("SpeedA: ");
     disp(speedA);
     fprintf("SpeedB: ");
@@ -35,6 +35,7 @@ function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negativ
                                 %CW/right positive
     brick.StopMotor('A', 'Brake');
     brick.StopMotor('B', 'Brake');
+    pause(0.5);
     brick.GyroCalibrate(2);
     pause(0.5);
     curAngle = brick.GyroAngle(2);
@@ -60,7 +61,7 @@ function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negativ
            brick.MoveMotorAngleRel('A', -25, 5, 'Brake');
            brick.MoveMotorAngleRel('B', 25, 5, 'Brake');
            curAngle = brick.GyroAngle(2);
-           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);   
            curAngle = brick.GyroAngle(2);
                       disp(curAngle);
 
@@ -97,6 +98,8 @@ function colorCheck(brick)
                  brick.StopMotor('B', 'Brake');               
                  fprintf("Stopped at red line");
                  pause(3);
+                 brick.MoveMotorAngleRel('AB', -30, 180, 'Brake');
+                 pause(1);
                  
              case 4
                  brick.StopMotor('A', 'Brake');
@@ -130,27 +133,24 @@ function ultraCheck(brick)
     distanceMax = 40;
     
     %Equations to slow down the speed as it gets closer to the center
-    driftLeftEquation = -speedA + (27 / wallDistance^3);
-    driftRightEquation = ( 2 / 2^wallDistance) - speedB;
+    driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
+    driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;
     
     disp(wallDistance);
     
     disp(wallDistance);
-    if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
+    %if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and room inside the room of error.
-            fprintf("Moving Forward");
-            brick.MoveMotor('A', speedA);
-            brick.MoveMotor('B', speedB);
-            pause(1);
+     %       fprintf("Moving Forward");
+            
             
         
         
-    elseif wallDistance > (distanceWall + distanceRoom) %Drifiting left
+    if wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
         fprintf("Drifting Left");
       
-           brick.MoveMotor('B', -(driftLeftEquation));
-           brick.MoveMotor('A', speedA);
-           pause(1);
+           speedB = -(driftLeftEquation);
+          
 
    elseif (wallDistance > distanceMax) % turning right
          fprintf("turning right");
@@ -159,9 +159,9 @@ function ultraCheck(brick)
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
           fprintf("Drifting Right");
       
-             brick.MoveMotor('B', speedB);
-             brick.MoveMotor('A', -(driftRightEquation));
-             pause(1);
+             
+             speedA = -(driftRightEquation);
+             
           
 
         
