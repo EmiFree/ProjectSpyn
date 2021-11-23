@@ -2,7 +2,8 @@ global speedA
 global speedB
 speedA = -30;
 speedB = -30;
-
+global green
+green = false;
 global loop
 loop = 1;
 brick.SetColorMode(1, 2);
@@ -28,10 +29,12 @@ brick.SetColorMode(1, 2);
     
     brick.StopMotor('A', 'Brake');          %stop robot to finish
     brick.StopMotor('B', 'Brake');
+    music(brick);
+
     
     %END OF EXIT CODE, ALL CODE BEYOND HERE ARE METHODS    
 
-
+%TURN
 function turn(brick, angle)                 %uses gyro to turn exact angle, CCW/left negative
                                             %CW/right positive
     brick.StopMotor('A', 'Brake');          %stop robot
@@ -71,7 +74,7 @@ function turn(brick, angle)                 %uses gyro to turn exact angle, CCW/
     end    
 
 end
-
+%TOUCH
 function touchCheck(brick)
     frontWall = brick.TouchPressed(4);   
     if(frontWall == 1)
@@ -85,9 +88,10 @@ function touchCheck(brick)
     end
     frontWall = 0;                                          %set touch sensor back to 0
 end
-
+%COLOR
 function colorCheck(brick)
    global loop
+   global green
    colorState = brick.ColorCode(1);
    
     switch colorState 
@@ -106,20 +110,22 @@ function colorCheck(brick)
                     brick.StopMotor('A', 'Brake');
                     brick.StopMotor('B', 'Brake');
                     yellow(brick);
-                    music(brick);
+                    loop = 0;
                  end    
                  fprintf("Yellow ");
-                 %turn around, drop off passenger, and end program
-                 loop = 0;
+                 
                  
              case 3                                         %Case when color is GREEN
-                 if(green == false)
-                     brick.StopMotor('A', 'Brake');
+                 if(green == false)                         %If passenger has not yet been picked up
+                     brick.StopMotor('A', 'Brake');         %Stop robot
                      brick.StopMotor('B', 'Brake');
                      fprintf("Green ");
                      green = true;
-                     manualControl(brick);      %switch to manual controls
-                 end 
+                     manualControl(brick);                  %switch to manual controls
+                 else
+                     brick.playTone(10, 666, 166.67); 
+                 end
+                 
     end
     
 
@@ -179,7 +185,7 @@ function ultraCheck(brick)
    end
 
 end
-
+%MANUAL CONTROL
 function manualControl(brick)
     global key
     InitKeyboard();     %Stores value of "key" based on what is pressed.
@@ -217,7 +223,7 @@ function manualControl(brick)
     CloseKeyboard(); %Closes keyboard inputs
 
 end
-
+%MUSIC
 function music(brick)
             volume = 10;
             brick.playTone(volume, 349.23, 166.67);
@@ -232,7 +238,7 @@ function music(brick)
             pause(0.125);
             brick.playTone(volume, 698.46, 1000);
 end
-
+%YELLOW
 function yellow(brick)
     brick.StopMotor('A', 'Brake');
     brick.StopMotor('B', 'Brake');
