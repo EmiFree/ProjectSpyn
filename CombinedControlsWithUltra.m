@@ -2,7 +2,7 @@ global speedA
 global speedB
 speedA = -30;
 speedB = -30;
-%edit
+
 global loop
 loop = 1;
 brick.SetColorMode(1, 2);
