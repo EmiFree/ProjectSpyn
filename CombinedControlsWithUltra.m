@@ -24,46 +24,48 @@ brick.SetColorMode(1, 2);
     disp(speedB);
     end
     
-    brick.StopMotor('A', 'Brake');
-    brick.StopMotor('B', 'Brake');
-
+    %END OF MAIN LOOP, ALL CODE IN THIS ZONE IS EXIT CODE
     
+    brick.StopMotor('A', 'Brake');          %stop robot to finish
+    brick.StopMotor('B', 'Brake');
+    
+    %END OF EXIT CODE, ALL CODE BEYOND HERE ARE METHODS    
 
 
-function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negative
-                                %CW/right positive
-    brick.StopMotor('A', 'Brake');
+function turn(brick, angle)                 %uses gyro to turn exact angle, CCW/left negative
+                                            %CW/right positive
+    brick.StopMotor('A', 'Brake');          %stop robot
     brick.StopMotor('B', 'Brake');
     pause(0.5);
-    brick.GyroCalibrate(2);
+    brick.GyroCalibrate(2);                 %set current angle to 0 degrees
     pause(0.5);
     brick.playTone(20, 530, 166.67);
-    curAngle = brick.GyroAngle(2);
+    curAngle = brick.GyroAngle(2);          %read current angle measure
     curAngle = brick.GyroAngle(2);
     curAngle = brick.GyroAngle(2);
     disp(angle);
     disp(curAngle);
-    if(angle > 0)               %positive, so turn CW/right
+    if(angle > 0)                           %positive, so turn CW/right
         fprintf("CW");
         disp(curAngle);
-       while (curAngle < (angle - 6))
-           brick.MoveMotorAngleRel('A', 25, 5, 'Brake');
-           brick.MoveMotorAngleRel('B', -25, 5, 'Brake');
-           curAngle = brick.GyroAngle(2);
+       while (curAngle < (angle - 6))                           %check when to stop spinning when desired angle is met
+           brick.MoveMotorAngleRel('A', 25, 5, 'Brake');        %spin a tiny ammount then stop
+           brick.MoveMotorAngleRel('B', -25, 5, 'Brake');       
+           curAngle = brick.GyroAngle(2);                       %read angle measure
            curAngle = brick.GyroAngle(2);
            curAngle = brick.GyroAngle(2);           
            disp(curAngle);
            
        end                             
-    else                        %negative, so turn CCW/left
+    else                                    %negative, so turn CCW/left
         fprintf("CCW");
-        while(curAngle > (angle + 6))
-           brick.MoveMotorAngleRel('A', -25, 5, 'Brake');
+        while(curAngle > (angle + 6))                           %check when to stop spinning when desired angle is met
+           brick.MoveMotorAngleRel('A', -25, 5, 'Brake');       %spin a tiny ammount then stop
            brick.MoveMotorAngleRel('B', 25, 5, 'Brake');
-           curAngle = brick.GyroAngle(2);
+           curAngle = brick.GyroAngle(2);                       %read angle measure
            curAngle = brick.GyroAngle(2);   
            curAngle = brick.GyroAngle(2);
-                      disp(curAngle);
+           disp(curAngle);
 
         end      
     end    
@@ -71,19 +73,17 @@ function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negativ
 end
 
 function touchCheck(brick)
-    %do whatever turning thing is needed when the touch sensor is pressed
-    frontWall = brick.TouchPressed(4);
-    
+    frontWall = brick.TouchPressed(4);   
     if(frontWall == 1)
         fprintf("bump!");
-        brick.StopMotor('A');  %stops robot
+        brick.StopMotor('A');                               %stops robot
         brick.StopMotor('B');
-        brick.MoveMotorAngleRel('A', 25, 200, 'Brake');
+        brick.MoveMotorAngleRel('A', 25, 200, 'Brake');     %move backwards to give room to turn
         brick.MoveMotorAngleRel('B', 25, 200, 'Brake');
         pause(2);
-        turn(brick, -90); 
+        turn(brick, -90);                                   %turn left 90 degrees
     end
-    frontWall = 0;
+    frontWall = 0;                                          %set touch sensor back to 0
 end
 
 function colorCheck(brick)
@@ -93,7 +93,7 @@ function colorCheck(brick)
     switch colorState 
              case 0
                  fprintf("Continue :)");
-             case 5
+             case 5                                         %Case when color is RED
                  brick.StopMotor('A', 'Brake');
                  brick.StopMotor('B', 'Brake');               
                  fprintf("Stopped at red line");
@@ -101,7 +101,7 @@ function colorCheck(brick)
                  brick.MoveMotorAngleRel('AB', -30, 180, 'Brake');
                  pause(1);
                  
-             case 4
+             case 4                                         %Case when color is YELLOW
                  if (green == true)
                     brick.StopMotor('A', 'Brake');
                     brick.StopMotor('B', 'Brake');
@@ -112,12 +112,14 @@ function colorCheck(brick)
                  %turn around, drop off passenger, and end program
                  loop = 0;
                  
-             case 3
-                 brick.StopMotor('A', 'Brake');
-                 brick.StopMotor('B', 'Brake');
-                 fprintf("Green ");
-                 green = true;
-                 manualControl(brick);      %switch to manual controls
+             case 3                                         %Case when color is GREEN
+                 if(green == false)
+                     brick.StopMotor('A', 'Brake');
+                     brick.StopMotor('B', 'Brake');
+                     fprintf("Green ");
+                     green = true;
+                     manualControl(brick);      %switch to manual controls
+                 end 
     end
     
 
@@ -137,19 +139,14 @@ function ultraCheck(brick)
     distanceMax = 40;
     
     %Equations to slow down the speed as it gets closer to the center
-    
-    
-    
-    disp(wallDistance);
-    
+    fprintf("wall distance : ");    
     disp(wallDistance);
     %if wallDistance > (distanceWall - distanceRoom) && wallDistance < (distanceWall + distanceRoom) %Keepmoving forward
        %if statement used to keep moving forward if it is in the center and room inside the room of error.
      %       fprintf("Moving Forward");
-            
-            
-        
-        
+      driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;      
+      driftLeftEquation = 50 + (3^(wallDistance-25) - 20);      
+                
     if (wallDistance > distanceMax) % turning right
         fprintf("turning right");
          brick.StopMotor('B', 'Brake');
@@ -170,19 +167,15 @@ function ultraCheck(brick)
          brick.MoveMotorAngleRel('A', -30, 720, 'Brake');
          brick.MoveMotorAngleRel('B', -30, 720, 'Brake');
          pause(3);
-          
-        
+                  
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
-          fprintf("Drifting Right");
-           driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;  
-           speedA = -(driftRightEquation);    
+        fprintf("Drifting Right");
+        speedA = -(driftRightEquation);    
 
    elseif wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
         fprintf("Drifting Left");
-        driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
         speedB = -(driftLeftEquation);
-        
-        
+                
    end
 
 end
