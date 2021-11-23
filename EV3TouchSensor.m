@@ -1,4 +1,4 @@
-edit test
+
 while (state ~= 6)
     touch = brick.TouchPressed(4);
     state = 0;
