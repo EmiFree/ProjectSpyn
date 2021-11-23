@@ -2,24 +2,22 @@ global speedA
 global speedB
 speedA = -30;
 speedB = -30;
-green = false;
 
 global loop
 loop = 1;
 brick.SetColorMode(1, 2);
 
 
-    while(loop == 1)        %main loop, runs scanning functions, moves the robot
- 
-    brick.MoveMotor('A', speedA);       %need to check how speed increments in a loop work
-    brick.MoveMotor('B',speedB);        %and make sure that you can change speed without using a stop motor command
-    pause(0.1);
+    while(loop == 1)        %main loop, runs scanning functions, moves the robot       
     colorCheck(brick);
-    pause(0.1);
+    pause(0.02);
     touchCheck(brick);
-    pause(0.1); 
+    pause(0.05);
     ultraCheck(brick);
-    pause(0.1); 
+    pause(0.01); 
+    brick.MoveMotor('A', speedA);       
+    brick.MoveMotor('B',speedB);
+    
     fprintf("SpeedA: ");
     disp(speedA);
     fprintf("SpeedB: ");
@@ -39,6 +37,7 @@ function turn(brick, angle)     %uses gyro to turn exact angle, CCW/left negativ
     pause(0.5);
     brick.GyroCalibrate(2);
     pause(0.5);
+    brick.playTone(20, 530, 166.67);
     curAngle = brick.GyroAngle(2);
     curAngle = brick.GyroAngle(2);
     curAngle = brick.GyroAngle(2);
@@ -98,7 +97,7 @@ function colorCheck(brick)
                  brick.StopMotor('A', 'Brake');
                  brick.StopMotor('B', 'Brake');               
                  fprintf("Stopped at red line");
-                 pause(6);
+                 pause(3);
                  brick.MoveMotorAngleRel('AB', -30, 180, 'Brake');
                  pause(1);
                  
@@ -124,19 +123,6 @@ function colorCheck(brick)
 
 end
 
-function yellow(brick)
-    brick.StopMotor('A', 'Brake');
-    brick.StopMotor('B', 'Brake');
-    fprintf("Yellow ");
-    turn(brick,180);
-    pause(5);
-    
-    brick.MoveMotorAngleRel('C', 60, 4000, 'Brake'); 
-    pause(3);
-    brick.MoveMotorAngleRel('A', -30, 200, 'Brake');
-    brick.MoveMotorAngleRel('B', -30, 200, 'Brake')
-end
-
 function ultraCheck(brick)
     wallDistance =  brick.UltrasonicDist(3);
     global speedA;
@@ -151,9 +137,8 @@ function ultraCheck(brick)
     distanceMax = 40;
     
     %Equations to slow down the speed as it gets closer to the center
-    driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
-    driftRightEquation = ((wallDistance - 22)^2 / 300) + 30;
-    %( (700* wallDistance) / wallDistance^3) +30;
+    
+    
     
     disp(wallDistance);
     
@@ -165,24 +150,38 @@ function ultraCheck(brick)
             
         
         
-    if wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
-        fprintf("Drifting Left");
-      
-           speedB = -(driftLeftEquation);
-          
-
-   elseif (wallDistance > distanceMax) % turning right
-         fprintf("turning right");
+    if (wallDistance > distanceMax) % turning right
+        fprintf("turning right");
+         brick.StopMotor('B', 'Brake');
+         brick.StopMotor('A', 'Brake');
+         
+         pause(1);
+         brick.playTone(20, 440, 166.67);
+         
+         brick.MoveMotorAngleRel('A', -30, 720, 'Brake');
+         brick.MoveMotorAngleRel('B', -30, 720, 'Brake');
+         pause(3);
+         
+         
          turn(brick, 90);
+         brick.playTone(20, 300, 166.67);
+         pause(0.2);
+         
+         brick.MoveMotorAngleRel('A', -30, 720, 'Brake');
+         brick.MoveMotorAngleRel('B', -30, 720, 'Brake');
+         pause(3);
+          
         
    elseif wallDistance < (distanceWall - distanceRoom) %Drifitng right
           fprintf("Drifting Right");
-      
-             
-             speedA = -(driftRightEquation);
-             
-          
+           driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;  
+           speedA = -(driftRightEquation);    
 
+   elseif wallDistance > (distanceWall + distanceRoom) && wallDistance < distanceMax %Drifiting left
+        fprintf("Drifting Left");
+        driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
+        speedB = -(driftLeftEquation);
+        
         
    end
 
@@ -224,7 +223,7 @@ function manualControl(brick)
     end
     CloseKeyboard(); %Closes keyboard inputs
 
-end %done
+end
 
 function music(brick)
             volume = 10;
@@ -239,4 +238,17 @@ function music(brick)
             brick.playTone(volume, 587.33, 125);
             pause(0.125);
             brick.playTone(volume, 698.46, 1000);
-end %done
+end
+
+function yellow(brick)
+    brick.StopMotor('A', 'Brake');
+    brick.StopMotor('B', 'Brake');
+    fprintf("Yellow ");
+    turn(brick,180);
+    pause(5);
+    
+    brick.MoveMotorAngleRel('C', 60, 4000, 'Brake'); 
+    pause(3);
+    brick.MoveMotorAngleRel('A', -30, 200, 'Brake');
+    brick.MoveMotorAngleRel('B', -30, 200, 'Brake')
+end
