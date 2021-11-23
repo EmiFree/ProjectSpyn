@@ -2,7 +2,8 @@ global speedA
 global speedB
 speedA = -30;
 speedB = -30;
-%edit
+green = false;
+
 global loop
 loop = 1;
 brick.SetColorMode(1, 2);
@@ -102,21 +103,38 @@ function colorCheck(brick)
                  pause(1);
                  
              case 4
-                 brick.StopMotor('A', 'Brake');
-                 brick.StopMotor('B', 'Brake');
+                 if (green == true)
+                    brick.StopMotor('A', 'Brake');
+                    brick.StopMotor('B', 'Brake');
+                    yellow(brick);
+                    music(brick);
+                 end    
                  fprintf("Yellow ");
-                 %turn around, drop off passenger, and end program.
-                 music(brick);
+                 %turn around, drop off passenger, and end program
                  loop = 0;
                  
              case 3
                  brick.StopMotor('A', 'Brake');
                  brick.StopMotor('B', 'Brake');
                  fprintf("Green ");
+                 green = true;
                  manualControl(brick);      %switch to manual controls
     end
     
 
+end
+
+function yellow(brick)
+    brick.StopMotor('A', 'Brake');
+    brick.StopMotor('B', 'Brake');
+    fprintf("Yellow ");
+    turn(brick,180);
+    pause(5);
+    
+    brick.MoveMotorAngleRel('C', 60, 4000, 'Brake'); 
+    pause(3);
+    brick.MoveMotorAngleRel('A', -30, 200, 'Brake');
+    brick.MoveMotorAngleRel('B', -30, 200, 'Brake')
 end
 
 function ultraCheck(brick)
@@ -134,8 +152,7 @@ function ultraCheck(brick)
     
     %Equations to slow down the speed as it gets closer to the center
     driftLeftEquation = 50 + (3^(wallDistance-25) - 20);
-    driftRightEquation = abs((wallDistance^2-20) / (5^wallDistance)) + 30;
-    %( (700* wallDistance) / wallDistance^3) +30;
+    driftRightEquation = ( (700* wallDistance) / wallDistance^3) +30;
     
     disp(wallDistance);
     
@@ -206,7 +223,7 @@ function manualControl(brick)
     end
     CloseKeyboard(); %Closes keyboard inputs
 
-end
+end %done
 
 function music(brick)
             volume = 10;
@@ -221,4 +238,4 @@ function music(brick)
             brick.playTone(volume, 587.33, 125);
             pause(0.125);
             brick.playTone(volume, 698.46, 1000);
-end
+end %done
