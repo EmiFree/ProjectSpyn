@@ -16,9 +16,9 @@ brick.SetColorMode(1, 2);
         touchCheck(brick);
         pause(0.05);
 
-        if(doUltra > 5)
-          ultraCheck(brick);
-          pause(0.025);
+        if(doUltra > 5)             %checks how many times since last ultraCheck has ran,
+          ultraCheck(brick);        %so that ultraCheck gets run less often, once its been long enough
+          pause(0.025);             %since the last ultraCheck, it will run ultraCheck and set doUltra to 0
           brick.MoveMotor('A', speedA);
           brick.MoveMotor('B',speedB);
           doUltra = 0;
