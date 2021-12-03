@@ -9,7 +9,7 @@ loop = 1;
 global doUltra
 doUltra = 6;
 global startOnTurn
-startOnTurn = 1;
+startOnTurn = 0;
 brick.SetColorMode(1, 2);
 
 
@@ -244,7 +244,7 @@ function manualControl(brick)
 end
 %MUSIC
 function music(brick)
-            volume = 10;
+            volume = 50;
             brick.playTone(volume, 349.23, 166.67);
             pause(0.16667);
             brick.playTone(volume, 466.16, 166.67);
